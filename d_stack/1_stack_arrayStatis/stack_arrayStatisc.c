@@ -1,97 +1,88 @@
-#include <stdio.h>  // untuk fungsi standar input-output (printf, scanf)
+#include <stdio.h>  
 
-// Ini buat mendefinisikan ukuran maksimum stack
 #define MAX 5  
 
 // Struktur Stack pakai array statis
 typedef struct {
-    int data[MAX];  // Array untuk menyimpan elemen stack
-    int top;        // Indeks elemen teratas dalam stack
+    int data[MAX];  
+    int top;        
 } Stack;
 
-// Fungsi untuk inisialisasi stack
 void initStack(Stack *s) {
-    s->top = -1;  // Set top ke -1 biar stack kosong saat pertama kali dibuat
+    s->top = -1; 
 }
 
-// Fungsi untuk memeriksa apakah stack kosong
 int isEmpty(Stack *s) {
-    return s->top == -1;  // Kalau top masih -1, berarti stack kosong
+    return s->top == -1;  
 }
 
-// Fungsi untuk memeriksa apakah stack penuh
 int isFull(Stack *s) {
-    return s->top == MAX - 1;  // Kalau top == MAX - 1, berarti stack penuh
+    return s->top == MAX - 1;  
 }
 
-// Fungsi untuk menambahkan elemen ke dalam stack (Push)
 void push(Stack *s, int value) {
-    if (isFull(s)) { // Cek apakah stack penuh sebelum push
+    if (isFull(s)) { 
         printf("Stack penuh, tidak bisa push %d!\n", value);
-        return;  // Stop eksekusi biar tidak nambahin elemen di luar batas
+        return;  
     }
 
-    s->top++;  // Geser top ke atas buat masukin elemen baru
-    s->data[s->top] = value; // Simpan nilai di posisi top
-    printf("Push: %d\n", value); // Kasih tahu elemen yang sudah dimasukkan
+    s->top++;  
+    s->data[s->top] = value; 
+    printf("Push: %d\n", value); 
 }
 
-// Fungsi untuk menghapus elemen dari stack (Pop)
 int pop(Stack *s) {
-    if (isEmpty(s)) { // Cek dulu apakah stack kosong sebelum pop
+    if (isEmpty(s)) { 
         printf("Stack kosong, tidak bisa pop!\n");
-        return -1;  // Balikin -1 kalau tidak ada elemen yang bisa di-pop
+        return -1;  
     }
     
-    int poppedValue = s->data[s->top]; // Simpan elemen yang akan dihapus
-    s->top--;  // Geser top ke bawah setelah pop
-    return poppedValue; // Balikin elemen yang dihapus
+    int poppedValue = s->data[s->top]; 
+    s->top--;  
+    return poppedValue; 
 }
 
-// Fungsi untuk melihat elemen teratas stack tanpa menghapusnya (Peek)
 int peek(Stack *s) {
-    if (isEmpty(s)) { // Cek dulu apakah stack kosong
+    if (isEmpty(s)) { 
         printf("Stack kosong!\n");
-        return -1; // Balikin -1 kalau tidak ada elemen di stack
+        return -1; 
     }
-    return s->data[s->top]; // Balikin elemen yang ada di top
+    return s->data[s->top]; 
 }
 
-// Fungsi untuk menampilkan isi stack
 void displayStack(Stack *s) {
-    if (isEmpty(s)) { // Cek apakah stack kosong
-        printf("Stack kosong!\n"); // Kalau kosong, kasih tahu
-        return; // Stop biar gak lanjut eksekusi
+    if (isEmpty(s)) { 
+        printf("Stack kosong!\n"); 
+        return; 
     }
     
-    printf("Isi Stack: "); // Kasih tahu kalau mau menampilkan stack
-    for (int i = s->top; i >= 0; i--) { // Mulai dari elemen teratas ke bawah
-        printf("%d ", s->data[i]); // Cetak elemen stack
+    printf("Isi Stack: "); 
+    for (int i = s->top; i >= 0; i--) { 
+        printf("%d ", s->data[i]); 
     }
-    printf("\n"); // Kasih baris baru setelah cetak semua elemen
+    printf("\n"); 
 }
 
-// Fungsi utama
 int main() {
-    Stack s; // Deklarasikan variabel stack
-    initStack(&s); // Inisialisasi stack
+    Stack s; 
+    initStack(&s); 
 
-    push(&s, 10); // Masukin elemen 10 ke stack
-    push(&s, 20); // Masukin elemen 20 ke stack
-    push(&s, 30); // Masukin elemen 30 ke stack
-    push(&s, 40); // Masukin elemen 40 ke stack
-    push(&s, 50); // Masukin elemen 50 ke stack
+    push(&s, 10); 
+    push(&s, 20); 
+    push(&s, 30); 
+    push(&s, 40); 
+    push(&s, 50); 
 
-    displayStack(&s); // Tampilkan isi stack setelah push
+    displayStack(&s); 
 
-    push(&s, 60); // Coba push elemen tambahan, tapi stack udah penuh
+    push(&s, 60); 
 
-    printf("Pop: %d\n", pop(&s)); // Hapus elemen teratas dari stack
-    printf("Pop: %d\n", pop(&s)); // Hapus elemen berikutnya dari stack
+    printf("Pop: %d\n", pop(&s)); 
+    printf("Pop: %d\n", pop(&s)); 
 
-    displayStack(&s); // Tampilkan isi stack setelah pop
+    displayStack(&s); 
 
-    printf("Elemen teratas: %d\n", peek(&s)); // Lihat elemen teratas
+    printf("Elemen teratas: %d\n", peek(&s)); 
 
-    return 0; // Program selesai
+    return 0; 
 }

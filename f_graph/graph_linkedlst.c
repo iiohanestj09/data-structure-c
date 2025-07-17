@@ -4,41 +4,36 @@
 
 // Node untuk adjacency list
 typedef struct Node {
-    int dest;          // Simpul tujuan
-    int weight;        // Bobot edge
-    struct Node* next; // Pointer ke node berikutnya
+    int dest;          
+    int weight;        
+    struct Node* next; 
 } Node;
 
-// ADT untuk AdjList
 typedef struct AdjList {
-    Node* head;        // Pointer ke head (awal) dari linked list
+    Node* head;        
 } AdjList;
 
-// Graph dengan ADT AdjList
 typedef struct Graph {
-    int nodes;         // Jumlah simpul dalam graf
-    AdjList* arr;    // Array dari adjacency list (menggunakan ADT AdjList)
+    int nodes;         
+    AdjList* arr;    
 } Graph;
 
-// Inisialisasi Graph
 void initializeGraph(Graph* graf, int numNodes) {
     graf->nodes = numNodes;
     graf->arr = (AdjList*)malloc(numNodes * sizeof(AdjList));
     for (int i = 0; i < numNodes; i++) {
-        graf->arr[i].head = NULL;  // Setiap adjacency list di-inisialisasi sebagai kosong
+        graf->arr[i].head = NULL;  
     }
 }
 
-// Menambahkan edge ke adjacency list
 void addEdge(Graph* graf, int v1, int v2, int weight) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->dest = v2;
     newNode->weight = weight;
-    newNode->next = graf->arr[v1].head;  // Masukkan ke awal linked list
+    newNode->next = graf->arr[v1].head;  
     graf->arr[v1].head = newNode;
 }
 
-// Fungsi untuk menemukan node dengan jarak minimum
 int findMinDistance(int* dist, int* visited, int numNodes) {
     int minDist = INT_MAX;
     int minIndex = -1;
@@ -51,14 +46,12 @@ int findMinDistance(int* dist, int* visited, int numNodes) {
     return minIndex;
 }
 
-// Mencetak jalur dari source ke destination
 void printPath(int* parent, int current) {
     if (current == -1) return;
     printPath(parent, parent[current]);
     printf("%d ", current);
 }
 
-// Dijkstra untuk menghitung jarak terpendek
 void dijkstra(Graph* graf, int source, int destination) {
     int numNodes = graf->nodes;
     int dist[numNodes];
@@ -74,10 +67,10 @@ void dijkstra(Graph* graf, int source, int destination) {
 
     for (int count = 0; count < numNodes - 1; count++) {
         int u = findMinDistance(dist, visited, numNodes);
-        if (u == -1) break; // Jika tidak ada node yang tersisa untuk diproses
+        if (u == -1) break; 
         visited[u] = 1;
 
-        Node* temp = graf->arr[u].head;  // Traversal linked list dari node u
+        Node* temp = graf->arr[u].head;  
         while (temp != NULL) {
             int v = temp->dest;
             if (!visited[v] && dist[u] != INT_MAX && dist[u] + temp->weight < dist[v]) {
@@ -98,7 +91,6 @@ void dijkstra(Graph* graf, int source, int destination) {
     }
 }
 
-// Membebaskan memori graf
 void freeGraph(Graph* graf) {
     for (int i = 0; i < graf->nodes; i++) {
         Node* current = graf->arr[i].head;

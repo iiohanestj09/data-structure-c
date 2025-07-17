@@ -1,96 +1,87 @@
-#include <stdio.h>   // Pustaka standar untuk input-output seperti printf dan scanf
-#include <stdlib.h>  // Pustaka standar untuk fungsi alokasi memori seperti malloc dan free
+#include <stdio.h>   
+#include <stdlib.h>  
 
-// Ini untuk mendefinisikan struktur Node pada Linked List yang bakal dipakai untuk Queue
 typedef struct Node {
-    int data;          // Data yang bakal disimpan di dalam node
-    struct Node* next; // Pointer ke node berikutnya (karena pakai linked list)
+    int data;          
+    struct Node* next; 
 } Node;
 
-// Ini adalah struktur utama dari Queue yang terdiri dari head (elemen pertama) dan tail (elemen terakhir)
 typedef struct {
-    Node* head;  // Pointer ke elemen paling depan (head) dalam queue
-    Node* tail;   // Pointer ke elemen paling belakang (tail) dalam queue
+    Node* head;  
+    Node* tail;   
 } Queue;
 
-// Fungsi untuk menginisialisasi queue, ini harus dipanggil dulu sebelum queue dipakai
 void initQueue(Queue* q) {
-    q->head = q->tail = NULL;  // Awalnya, queue masih kosong jadi head dan tail di-set NULL
+    q->head = q->tail = NULL;  
 }
 
-// Fungsi untuk memeriksa apakah queue kosong atau tidak
 int isEmpty(Queue* q) {
-    return (q->head == NULL);  // Kalau head masih NULL, artinya queue kosong
+    return (q->head == NULL);  
 }
 
-// Fungsi untuk menambahkan elemen ke dalam queue (enqueue)
 void enqueue(Queue* q, int value) {
-    // Alokasi memori untuk node baru (karena pakai linked list, tiap elemen harus dialokasikan secara dinamis)
-    Node* newNode = (Node*) malloc(sizeof(Node));  // malloc untuk alokasi memori
-    newNode->data = value;  // Masukkan nilai yang ingin ditambahkan ke dalam node
-    newNode->next = NULL;   // Node baru ini belum terhubung ke node lain, jadi next-nya NULL
+    Node* newNode = (Node*) malloc(sizeof(Node));  
+    newNode->data = value;  
+    newNode->next = NULL;   
 
-    if (q->tail == NULL) {  // Kalau queue masih kosong (tail NULL), berarti ini elemen pertama
-        q->head = q->tail = newNode;  // Head dan tail langsung menunjuk ke node baru ini
+    if (q->tail == NULL) {  
+        q->head = q->tail = newNode;  
     } else {  
-        q->tail->next = newNode;  // Hubungkan node terakhir (tail) ke newNode
-        q->tail = newNode;        // Geser tail ke newNode (karena newNode sekarang jadi elemen terakhir)
+        q->tail->next = newNode;  
+        q->tail = newNode;        
     }
-    printf("Enqueue: %d\n", value);  // Cetak elemen yang ditambahkan
+    printf("Enqueue: %d\n", value);  
 }
 
-// Fungsi untuk menghapus elemen dari queue (dequeue)
 int dequeue(Queue* q) {
-    if (isEmpty(q)) {  // Periksa dulu apakah queue kosong
-        printf("Queue kosong, tidak bisa dequeue!\n");  // Kalau kosong, cetak pesan error
-        return -1;  // Kembalikan -1 sebagai tanda error
+    if (isEmpty(q)) {  
+        printf("Queue kosong, tidak bisa dequeue!\n");  
+        return -1;  
     }
 
-    Node* temp = q->head;  // Simpan node yang akan dihapus ke dalam variabel temp
-    int data = temp->data;  // Simpan nilai dari node yang akan dikeluarkan
+    Node* temp = q->head;  
+    int data = temp->data; 
 
-    q->head = q->head->next;  // Geser head ke node berikutnya
+    q->head = q->head->next;  
 
-    if (q->head == NULL) {  // Kalau setelah dequeue queue jadi kosong
-        q->tail = NULL;  // Rear juga harus di-set NULL
+    if (q->head == NULL) {  
+        q->tail = NULL;  
     }
 
-    free(temp);  // Hapus node yang sudah tidak digunakan dari memori
-    return data;  // Kembalikan nilai yang dikeluarkan
+    free(temp);  
+    return data; 
 }
 
-// Fungsi untuk menampilkan isi queue
 void displayQueue(Queue* q) {
-    if (isEmpty(q)) {  // Cek dulu apakah queue kosong
+    if (isEmpty(q)) {  
         printf("Queue kosong!\n");
-        return;  // Langsung berhenti kalau queue kosong
+        return;  
     }
 
     printf("Isi Queue: ");
-    Node* temp = q->head;  // Pakai variabel sementara untuk traversal dari head ke tail
-    while (temp != NULL) {  // Selama masih ada node, lakukan perulangan
-        printf("%d ", temp->data);  // Cetak nilai data di node saat ini
-        temp = temp->next;  // Geser ke node berikutnya
+    Node* temp = q->head;  
+    while (temp != NULL) { 
+        printf("%d ", temp->data);  
+        temp = temp->next;  
     }
-    printf("\n");  // Buat baris baru setelah selesai menampilkan isi queue
+    printf("\n");  
 }
 
-// Fungsi utama
 int main() {
-    Queue q;  // Deklarasi variabel queue
-    initQueue(&q);  // Panggil fungsi inisialisasi queue sebelum digunakan
+    Queue q;  
+    initQueue(&q);  
 
-    enqueue(&q, 10);  // Tambahkan elemen 10 ke queue
-    enqueue(&q, 20);  // Tambahkan elemen 20 ke queue
-    enqueue(&q, 30);  // Tambahkan elemen 30 ke queue
-    enqueue(&q, 40);  // Tambahkan elemen 40 ke queue
+    enqueue(&q, 10);  
+    enqueue(&q, 20);  
+    enqueue(&q, 30);  
+    enqueue(&q, 40);  
 
-    displayQueue(&q);  // Tampilkan isi queue
+    displayQueue(&q);  
 
-    printf("Dequeue: %d\n", dequeue(&q));  // Hapus elemen paling depan dan cetak hasilnya
-    printf("Dequeue: %d\n", dequeue(&q));  // Hapus elemen berikutnya dan cetak hasilnya
+    printf("Dequeue: %d\n", dequeue(&q));  
+    printf("Dequeue: %d\n", dequeue(&q));  
 
-    displayQueue(&q);  // Tampilkan isi queue setelah dequeue
+    displayQueue(&q);  
 
-    return 0;  // Selesai program
+    return 0;  
 }
