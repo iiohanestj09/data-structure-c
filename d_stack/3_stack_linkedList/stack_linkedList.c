@@ -1,62 +1,67 @@
-#include <stdio.h>   
-#include <stdlib.h>  
+#include <stdio.h>
+#include <stdlib.h>
 
-// Definisi untuk Node sebagai ADT (Abstract Data Type)
-typedef struct Node {
-    int data;           
-    struct Node* next;  // Pointer ke node berikutnya dalam Linked List
+typedef struct node {
+    int data;
+    struct node* next;
 } Node;
 
-
-typedef struct Stack {
-    Node* top;  // Pointer ke node teratas dalam stack
+typedef struct stack {
+    Node* top;
 } Stack;
 
-Stack* createStack() {
-    Stack* stack = (Stack*)malloc(sizeof(Stack)); 
-    stack->top = NULL;  
-    return stack;  
+void init(Stack* st) {
+    st->top = NULL;
 }
 
-void push(Stack* stack, int data) {
-    Node* newNode = (Node*)malloc(sizeof(Node));  
-    newNode->data = data;  
-    newNode->next = stack->top;  
-    stack->top = newNode; 
-    printf("%d pushed to stack\n", data);  
+void push(Stack* st, int value) {
+    Node* newNode = (Node*) malloc(sizeof(Node));
+    newNode->data = value;
+    newNode->next = st->top;
+    st->top = newNode;
+
+    printf("Data berhasil ditambahkan\n");
 }
 
-int pop(Stack* stack) {
-    if (stack->top == NULL) {  
-        printf("Stack is empty\n");  
-        return -1;  
+void pop(Stack* st) {
+    if (st->top == NULL) {
+        printf("Stack Kosong, Gagal Menghapus\n");
+        return;
     }
-    Node* temp = stack->top;  
-    int poppedValue = temp->data; 
-    stack->top = stack->top->next; 
-    free(temp);  
-    return poppedValue; 
+    Node* temp = st->top;
+    st->top = st->top->next;
+    free(temp);
+
+    printf("Data berhasil di-Pop\n");
 }
 
-void destroyStack(Stack* stack) {
-    while (stack->top != NULL) {  
-        pop(stack);  
+void destroy(Stack* st) {
+    while (st->top != NULL) {
+        Node* temp = st->top;
+        st->top = st->top->next;
+        free(temp);
     }
-    free(stack);  
+    
+    free(st);
 }
 
 int main() {
-    
-    Stack* stack = createStack();  
-    push(stack, 10);  
-    push(stack, 20);  
-    push(stack, 30);  
+    Stack* st = (Stack*) malloc(sizeof(Stack));
+    init(st);
 
-    
-    printf("%d popped from stack\n", pop(stack));  
-    printf("%d popped from stack\n", pop(stack));  
+    push(st, 5);
+    push(st, 10);
+    push(st, 15);
+    pop(st);
 
-    destroyStack(stack);  
+    push(st, 20);
+    push(st, 25);
+    pop(st);
+    pop(st);
+    pop(st);
 
-    return 0;  
+    push(st, 30);
+    destroy(st);
+
+    return 0;
 }

@@ -1,84 +1,70 @@
-#include <stdio.h>   
-#include <stdlib.h>  
+#include <stdio.h>
+#include <stdlib.h>
 
-typedef struct {
-    int *data;     
-    int head;     
-    int tail;     
-    int capacity; 
+typedef struct queue {
+    int* data;
+    int head;
+    int tail;
+    int size;
+    int capacity;
 } Queue;
 
-void initQueue(Queue *q, int size) {
-    q->data = (int*) malloc(size * sizeof(int));  
-    q->head = q->tail = -1;  
-    q->capacity = size;      
+Queue* createQueue(int sizeX) {
+    Queue* que = (Queue*) malloc(sizeof(Queue));
+    que->data = (int*) malloc(sizeX * sizeof(int));
+    que->head = que->tail = -1;
+    que->size = 0;
+    que->capacity = sizeX;
+    return que;
 }
 
-int isEmpty(Queue *q) {
-    return (q->head == -1 || q->head > q->tail);  
+void enqueue(Queue* que, int value) {
+    if (que->size == que->capacity) {
+        printf("Gagal Enqueue, Queue Penuh\n");
+        return;
+    }
+    if (que->head == -1) {
+        que->head = 0;
+    }
+    que->tail = (que->tail + 1) % que->capacity;
+    que->data[que->tail] = value;
+    que->size++;
+    printf("Data berhasil ditambahkan\n");
 }
 
-void enqueue(Queue *q, int value) {
-    if (q->tail == q->capacity - 1) {  
-        q->capacity *= 2;  
-        q->data = (int*) realloc(q->data, q->capacity * sizeof(int));  
-        printf("Ukuran queue bertambah menjadi %d\n", q->capacity);  
+void dequeue(Queue* que) {
+    if (que->size == 0) {
+        printf("Gagal Dequeue, Queue Kosong\n");
+        return;
     }
-
-    if (q->head == -1) q->head = 0;  
-    q->tail++;  
-    q->data[q->tail] = value;  
-    printf("Enqueue: %d\n", value);  
+    if (que->size == 1) {
+        que->head = que->tail = -1;
+    } else {
+        que->head = (que->head + 1) % que->capacity;
+    }
+    que->size--;
+    printf("Data Berhasil dihapus\n");
 }
 
-int dequeue(Queue *q) {
-    if (isEmpty(q)) {  
-        printf("Queue kosong, tidak bisa dequeue!\n");  
-        return -1;  
-    }
-    
-    int temp = q->data[q->head];  
-    q->head++;  
-
-    if (q->head > q->tail) {
-        q->head = q->tail = -1;  
-    }
-
-    return temp;  
-}
-
-void displayQueue(Queue *q) {
-    if (isEmpty(q)) {  
-        printf("Queue kosong!\n");  
-        return; 
-    }
-
-    printf("Isi Queue: ");  
-    for (int i = q->head; i <= q->tail; i++) {  
-        printf("%d ", q->data[i]);  
-    }
-
-    printf("\n");
+void destroy(Queue* que) {
+    free(que->data);
+    free(que);
 }
 
 int main() {
-    Queue q;  
-    initQueue(&q, 5);  
+    Queue* que = createQueue(5);
 
-    enqueue(&q, 10); 
-    enqueue(&q, 20); 
-    enqueue(&q, 30); 
-    enqueue(&q, 40); 
-    enqueue(&q, 50); 
-    
-    displayQueue(&q);  
+    enqueue(que, 1);
+    enqueue(que, 2);
+    enqueue(que, 3);
+    dequeue(que);
 
-    enqueue(&q, 60);  
+    enqueue(que, 4);
+    enqueue(que, 5);
+    enqueue(que, 6);
 
-    printf("Dequeue: %d\n", dequeue(&q));  
-    printf("Dequeue: %d\n", dequeue(&q));  
+    dequeue(que);
+    enqueue(que, 8);
 
-    displayQueue(&q);  
-
-    return 0;  
+    return 0;
 }

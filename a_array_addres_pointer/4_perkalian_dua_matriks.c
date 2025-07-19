@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 int ***kaliMatriks(int **arrA, int **arrB){
-    // alokasi memori untuk arrHasil
     int ***arrHasil = (int***) malloc(sizeof(int**));
     *arrHasil = (int**) malloc(2 * sizeof(int*));
     for(int i = 0; i < 2; i++){
@@ -25,17 +24,14 @@ int ***kaliMatriks(int **arrA, int **arrB){
 int main(){
     int baris = 2, kolom = 2;
 
-    // alokasi memori untuk baris matriks arrA dan arrB
     int **arrA = (int**) malloc(baris * sizeof(int*));
     int **arrB = (int**) malloc(baris * sizeof(int*));
 
-    // alokasi memori untuk kolom di tiap baris matriks arrA dan arrB
     for(int i = 0; i < baris; i++){
         arrA[i] = (int*) malloc(kolom * sizeof(int));
         arrB[i] = (int*) malloc(kolom * sizeof(int));
     }
 
-    // isi elemen di matriks arrA dengan kelipatan 3 dan matriks arrB dengan kelipatan 5
     printf("Matriks arrA:\n");
     int lipat3 = 3;
     for(int i = 0; i < baris; i++){
@@ -67,7 +63,6 @@ int main(){
         printf("\n");
     }
 
-    // membebaskan memori yang dialokasikan pada matriks arrA dan arrB
     for(int i = 0; i < baris; i++){
         free(arrA[i]);
         free(arrB[i]);

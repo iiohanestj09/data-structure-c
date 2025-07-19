@@ -1,87 +1,79 @@
-#include <stdio.h>   
-#include <stdlib.h>  
+#include <stdio.h>
+#include <stdlib.h>
 
-typedef struct Node {
-    int data;          
-    struct Node* next; 
+typedef struct node {
+    int data;
+    struct node* next;
 } Node;
 
-typedef struct {
-    Node* head;  
-    Node* tail;   
+typedef struct queue {
+    Node* head;
+    Node* tail;
 } Queue;
 
-void initQueue(Queue* q) {
-    q->head = q->tail = NULL;  
+void init(Queue* que) {
+    que->head = que->tail = NULL;
 }
 
-int isEmpty(Queue* q) {
-    return (q->head == NULL);  
+void enqueue(Queue* que, int value) {
+    Node* newNode = (Node*) malloc(sizeof(Node));
+    newNode->data = value;
+    newNode->next = NULL;
+
+    if (que->head == NULL) {
+        que->head = que->tail = newNode;
+    } else {
+        que->tail->next = newNode;
+        que->tail = newNode;
+    }
+
+    printf("Data Berhasil ditambahkan\n");
 }
 
-void enqueue(Queue* q, int value) {
-    Node* newNode = (Node*) malloc(sizeof(Node));  
-    newNode->data = value;  
-    newNode->next = NULL;   
-
-    if (q->tail == NULL) {  
-        q->head = q->tail = newNode;  
-    } else {  
-        q->tail->next = newNode;  
-        q->tail = newNode;        
+void dequeue(Queue* que) {
+    if (que->head == NULL) {
+        printf("Gagal dequeue, Queue Kosong\n");
+        return;
     }
-    printf("Enqueue: %d\n", value);  
+    Node* temp = que->head;
+    que->head = que->head->next;
+
+    if (que->head == NULL) {
+        que->tail = NULL;
+    }
+
+    free(temp);
+    printf("Data berhasil di-Dequeue\n");
 }
 
-int dequeue(Queue* q) {
-    if (isEmpty(q)) {  
-        printf("Queue kosong, tidak bisa dequeue!\n");  
-        return -1;  
+void destroy(Queue* que) {
+    Node* current = que->head;
+    while (current != NULL) {
+        Node* temp = current;
+        current = current->next;
+        free(temp);
     }
-
-    Node* temp = q->head;  
-    int data = temp->data; 
-
-    q->head = q->head->next;  
-
-    if (q->head == NULL) {  
-        q->tail = NULL;  
-    }
-
-    free(temp);  
-    return data; 
-}
-
-void displayQueue(Queue* q) {
-    if (isEmpty(q)) {  
-        printf("Queue kosong!\n");
-        return;  
-    }
-
-    printf("Isi Queue: ");
-    Node* temp = q->head;  
-    while (temp != NULL) { 
-        printf("%d ", temp->data);  
-        temp = temp->next;  
-    }
-    printf("\n");  
+    
+    free(que);
 }
 
 int main() {
-    Queue q;  
-    initQueue(&q);  
+    Queue* que = (Queue*) malloc(sizeof(Queue));
+    init(que);
 
-    enqueue(&q, 10);  
-    enqueue(&q, 20);  
-    enqueue(&q, 30);  
-    enqueue(&q, 40);  
+    enqueue(que, 101);
+    enqueue(que, 202);
+    enqueue(que, 303);
+    dequeue(que);
 
-    displayQueue(&q);  
+    enqueue(que, 404);
+    enqueue(que, 505);
+    dequeue(que);
 
-    printf("Dequeue: %d\n", dequeue(&q));  
-    printf("Dequeue: %d\n", dequeue(&q));  
+    enqueue(que, 606);
+    enqueue(que, 707);
 
-    displayQueue(&q);  
+    destroy(que);
 
-    return 0;  
+    return 0;
 }
